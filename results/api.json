@@ -1,0 +1,223 @@
+{
+  "harness": "API",
+  "model": "claude-opus-4-6",
+  "effort": "medium",
+  "summary": {
+    "total_turns": 7,
+    "input_tokens": 5740,
+    "cache_read_tokens": 7412,
+    "cache_write_tokens": 1346,
+    "output_tokens": 1298,
+    "total_tokens": 15796,
+    "cache_hit_rate_pct": 51.12,
+    "total_model_calls": 13,
+    "total_cost_usd": 0.219806,
+    "total_duration_seconds": 0.0812,
+    "checks_passed": 7,
+    "checks_total": 7
+  },
+  "turns": [
+    {
+      "turn_id": 1,
+      "session_id": "session_1",
+      "prompt": "Hi! Please remember my scheduling rules: I never schedule any tasks on Fridays, and I do not schedule work tasks on weekends (Saturday or Sunday). Also, please add three tasks: 'prepare quarterly report' (due_date: 'Monday', category: 'work', priority: 'high'), 'buy groceries' (due_date: 'Tuesday', category: 'personal', priority: 'medium'), and 'draft team slides' (due_date: 'Wednesday', category: 'work', priority: 'medium').",
+      "response": "Completed actions:\n- ok: added 'prepare quarterly report' (due=Monday, cat=work, prio=high); total=1\n- ok: added 'buy groceries' (due=Tuesday, cat=personal, prio=medium); total=2\n- ok: added 'draft team slides' (due=Wednesday, cat=work, prio=medium); total=3 (Verified against your scheduling rules: No Friday tasks: strictly never schedule any tasks on Fridays.; No weekend work: strictly do not schedule work tasks on weekends (Saturday or Sunday).)",
+      "input_tokens": 390,
+      "cache_read_tokens": 676,
+      "cache_write_tokens": 676,
+      "output_tokens": 225,
+      "model_calls": 2,
+      "tools_used": [
+        "add_task",
+        "add_task",
+        "add_task"
+      ],
+      "cost_usd": 0.036414,
+      "duration_seconds": 0.0018
+    },
+    {
+      "turn_id": 2,
+      "session_id": "session_1",
+      "prompt": "I just finished 'draft team slides', so please remove 'draft team slides' from my task list. Also add 'code review' (due_date: 'Wednesday', category: 'work', priority: 'high') and 'dentist appointment' (due_date: 'Thursday', category: 'health', priority: 'medium').",
+      "response": "Completed actions:\n- ok: removed 'draft team slides'; remaining=2\n- ok: added 'code review' (due=Wednesday, cat=work, prio=high); total=3\n- ok: added 'dentist appointment' (due=Thursday, cat=health, prio=medium); total=4 (Verified against your scheduling rules: No Friday tasks: strictly never schedule any tasks on Fridays.; No weekend work: strictly do not schedule work tasks on weekends (Saturday or Sunday).)",
+      "input_tokens": 1095,
+      "cache_read_tokens": 1352,
+      "cache_write_tokens": 0,
+      "output_tokens": 218,
+      "model_calls": 2,
+      "tools_used": [
+        "remove_task",
+        "add_task",
+        "add_task"
+      ],
+      "cost_usd": 0.034803,
+      "duration_seconds": 0.0017
+    },
+    {
+      "turn_id": 3,
+      "session_id": "session_1",
+      "prompt": "Please check official public holidays for US in 2026 using the holiday checker tool so I know which dates to avoid for work deadlines.",
+      "response": "Completed actions:\n- holidays(US, 2026, top 3):\n- 2026-01-01: New Year's Day (New Year's Day)\n- 2026-01-19: Martin Luther King, Jr. Day (Martin Luther King, Jr. Day)\n- 2026-02-16: Washington's Birthday (Presidents Day)",
+      "input_tokens": 1320,
+      "cache_read_tokens": 1352,
+      "cache_write_tokens": 0,
+      "output_tokens": 260,
+      "model_calls": 2,
+      "tools_used": [
+        "check_public_holidays"
+      ],
+      "cost_usd": 0.041328,
+      "duration_seconds": 0.0561
+    },
+    {
+      "turn_id": 4,
+      "session_id": "session_1",
+      "prompt": "Check what work tasks I currently have scheduled in my task list.",
+      "response": "Completed actions:\n- tasks (2 items): code review (due: Wednesday, work, high), prepare quarterly report (due: Monday, work, high)",
+      "input_tokens": 1610,
+      "cache_read_tokens": 1352,
+      "cache_write_tokens": 0,
+      "output_tokens": 115,
+      "model_calls": 2,
+      "tools_used": [
+        "get_tasks"
+      ],
+      "cost_usd": 0.034803,
+      "duration_seconds": 0.0008
+    },
+    {
+      "turn_id": 5,
+      "session_id": "session_2",
+      "prompt": "Welcome back! What scheduling rules and restrictions do you remember about me, and what tasks are currently on my task list?",
+      "response": "Completed actions:\n- tasks (4 items): buy groceries (due: Tuesday, personal, medium), code review (due: Wednesday, work, high), dentist appointment (due: Thursday, health, medium), prepare quarterly report (due: Monday, work, high) (Verified against your scheduling rules: No Friday tasks: strictly never schedule any tasks on Fridays.; No weekend work: strictly do not schedule work tasks on weekends (Saturday or Sunday).)",
+      "input_tokens": 182,
+      "cache_read_tokens": 670,
+      "cache_write_tokens": 670,
+      "output_tokens": 132,
+      "model_calls": 2,
+      "tools_used": [
+        "get_tasks"
+      ],
+      "cost_usd": 0.026198,
+      "duration_seconds": 0.0007
+    },
+    {
+      "turn_id": 6,
+      "session_id": "session_2",
+      "prompt": "Please add 'client budget meeting' (due_date: 'Friday', category: 'work', priority: 'high') and 'weekend server migration' (due_date: 'Saturday', category: 'work', priority: 'high') to my task list.",
+      "response": "I cannot schedule 'client budget meeting' on Friday or 'weekend server migration' on Saturday because your saved scheduling rules prohibit scheduling any tasks on Fridays and prohibit scheduling work tasks on weekends (Saturday or Sunday). Instead, I recommend scheduling them on Monday through Thursday.",
+      "input_tokens": 280,
+      "cache_read_tokens": 670,
+      "cache_write_tokens": 0,
+      "output_tokens": 78,
+      "model_calls": 1,
+      "tools_used": [],
+      "cost_usd": 0.011055,
+      "duration_seconds": 0.0004
+    },
+    {
+      "turn_id": 7,
+      "session_id": "session_2",
+      "prompt": "Good catch! Instead, please add 'server deployment' (due_date: 'Thursday', category: 'work', priority: 'high') to my task list and check official public holidays for GB in 2026.",
+      "response": "Completed actions:\n- ok: added 'server deployment' (due=Thursday, cat=work, prio=high); total=5\n- holidays(GB, 2026, top 3):\n- 2026-01-01: New Year's Day (New Year's Day)\n- 2026-04-03: Good Friday (Good Friday)\n- 2026-04-06: Easter Monday (Easter Monday)",
+      "input_tokens": 863,
+      "cache_read_tokens": 1340,
+      "cache_write_tokens": 0,
+      "output_tokens": 270,
+      "model_calls": 2,
+      "tools_used": [
+        "add_task",
+        "check_public_holidays"
+      ],
+      "cost_usd": 0.035205,
+      "duration_seconds": 0.0197
+    }
+  ],
+  "checks": [
+    {
+      "id": "state_tasks_expected_items_present",
+      "type": "disk_state",
+      "passed": true,
+      "details": "Present tasks: ['buy groceries', 'code review', 'dentist appointment', 'prepare quarterly report', 'server deployment']"
+    },
+    {
+      "id": "state_removed_task_absent",
+      "type": "disk_state",
+      "passed": true,
+      "details": "'draft team slides' is absent from data/tasks.json"
+    },
+    {
+      "id": "state_memory_persisted_on_disk",
+      "type": "disk_state",
+      "passed": true,
+      "details": "Saved memory rules count=2; CLAUDE.md exists=True"
+    },
+    {
+      "id": "state_contradiction_tasks_blocked",
+      "type": "disk_state",
+      "passed": true,
+      "details": "Forbidden Friday/weekend tasks were blocked from disk state"
+    },
+    {
+      "id": "state_multi_session_history_persisted",
+      "type": "disk_state",
+      "passed": true,
+      "details": "Sessions found in history.jsonl: ['session_1', 'session_2']"
+    },
+    {
+      "id": "execution_external_tool_called",
+      "type": "execution_state",
+      "passed": true,
+      "details": "Tools executed across run: ['add_task', 'add_task', 'add_task', 'remove_task', 'add_task', 'add_task', 'check_public_holidays', 'get_tasks', 'get_tasks', 'add_task', 'check_public_holidays']"
+    },
+    {
+      "id": "behavior_session2_recall_and_contradiction_refusal",
+      "type": "response_and_state",
+      "passed": true,
+      "details": "Turn 5 recalled memory=True, Turn 6 refused conflict=True"
+    }
+  ],
+  "loc": {
+    "api_harness_by_module": {
+      "loop.py": 116,
+      "tools.py": 147,
+      "history.py": 65,
+      "memory.py": 102,
+      "context.py": 48,
+      "compaction.py": 78,
+      "caching.py": 44,
+      "tokens.py": 77
+    },
+    "api_harness_total_loc": 677,
+    "api_all_files_loc": {
+      "API/main.py": 85,
+      "API/agent.py": 56,
+      "API/harness/loop.py": 116,
+      "API/harness/tools.py": 147,
+      "API/harness/history.py": 65,
+      "API/harness/memory.py": 102,
+      "API/harness/context.py": 48,
+      "API/harness/compaction.py": 78,
+      "API/harness/caching.py": 44,
+      "API/harness/tokens.py": 77
+    },
+    "api_total_loc": 818,
+    "sdk_replaces_by_module": {
+      "loop.py": 3,
+      "tools.py": 19,
+      "history.py": 2,
+      "memory.py": 1,
+      "context.py": 1,
+      "compaction.py": 1,
+      "caching.py": 1,
+      "tokens.py": 2
+    },
+    "sdk_replaces_total_lines": 30,
+    "sdk_all_files_loc": {
+      "SDK/main.py": 87,
+      "SDK/agent.py": 116,
+      "SDK/tools.py": 94
+    },
+    "sdk_total_loc": 297
+  }
+}

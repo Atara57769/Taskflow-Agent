@@ -1,0 +1,83 @@
+{
+  "name": "smarttasks_two_session_benchmark",
+  "description": "Seven-turn evaluation across two sessions testing task management tools, Nager.Date public holidays API, persistent scheduling memory, context engineering, compaction, and contradiction refusal.",
+  "model": "claude-opus-4-6",
+  "effort": "medium",
+  "sessions": [
+    {
+      "session_id": "session_1",
+      "turns": [
+        {
+          "turn_id": 1,
+          "prompt": "Hi! Please remember my scheduling rules: I never schedule any tasks on Fridays, and I do not schedule work tasks on weekends (Saturday or Sunday). Also, please add three tasks: 'prepare quarterly report' (due_date: 'Monday', category: 'work', priority: 'high'), 'buy groceries' (due_date: 'Tuesday', category: 'personal', priority: 'medium'), and 'draft team slides' (due_date: 'Wednesday', category: 'work', priority: 'medium')."
+        },
+        {
+          "turn_id": 2,
+          "prompt": "I just finished 'draft team slides', so please remove 'draft team slides' from my task list. Also add 'code review' (due_date: 'Wednesday', category: 'work', priority: 'high') and 'dentist appointment' (due_date: 'Thursday', category: 'health', priority: 'medium')."
+        },
+        {
+          "turn_id": 3,
+          "prompt": "Please check official public holidays for US in 2026 using the holiday checker tool so I know which dates to avoid for work deadlines."
+        },
+        {
+          "turn_id": 4,
+          "prompt": "Check what work tasks I currently have scheduled in my task list."
+        }
+      ]
+    },
+    {
+      "session_id": "session_2",
+      "turns": [
+        {
+          "turn_id": 5,
+          "prompt": "Welcome back! What scheduling rules and restrictions do you remember about me, and what tasks are currently on my task list?"
+        },
+        {
+          "turn_id": 6,
+          "prompt": "Please add 'client budget meeting' (due_date: 'Friday', category: 'work', priority: 'high') and 'weekend server migration' (due_date: 'Saturday', category: 'work', priority: 'high') to my task list."
+        },
+        {
+          "turn_id": 7,
+          "prompt": "Good catch! Instead, please add 'server deployment' (due_date: 'Thursday', category: 'work', priority: 'high') to my task list and check official public holidays for GB in 2026."
+        }
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "id": "state_tasks_expected_items_present",
+      "type": "disk_state",
+      "description": "Verify expected tasks (prepare quarterly report, buy groceries, code review, dentist appointment, server deployment) are saved in data/tasks.json."
+    },
+    {
+      "id": "state_removed_task_absent",
+      "type": "disk_state",
+      "description": "Verify 'draft team slides' was removed and does not exist in data/tasks.json."
+    },
+    {
+      "id": "state_memory_persisted_on_disk",
+      "type": "disk_state",
+      "description": "Verify persistent scheduling memory on disk (CLAUDE.md and memory.json) stores both the no-Friday rule and no-weekend-work rule."
+    },
+    {
+      "id": "state_contradiction_tasks_blocked",
+      "type": "disk_state",
+      "description": "Verify forbidden tasks requested in Turn 6 ('client budget meeting' on Friday and 'weekend server migration' on Saturday) were NOT added to data/tasks.json."
+    },
+    {
+      "id": "state_multi_session_history_persisted",
+      "type": "disk_state",
+      "description": "Verify conversation history on disk contains persisted records for both session_1 and session_2."
+    },
+    {
+      "id": "execution_external_tool_called",
+      "type": "execution_state",
+      "description": "Verify the external Nager.Date API tool (check_public_holidays) was executed during the scenario."
+    },
+    {
+      "id": "behavior_session2_recall_and_contradiction_refusal",
+      "type": "response_and_state",
+      "description": "Verify Session 2 recalled scheduling restrictions from Session 1 in Turn 5 and explicitly refused the contradictory Friday/Saturday request in Turn 6."
+    }
+  ]
+}
