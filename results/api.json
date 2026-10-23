@@ -190,7 +190,7 @@
     },
     "api_harness_total_loc": 677,
     "api_all_files_loc": {
-      "API/main.py": 85,
+      "API/main.py": 152,
       "API/agent.py": 56,
       "API/harness/loop.py": 116,
       "API/harness/tools.py": 147,
@@ -201,9 +201,9 @@
       "API/harness/caching.py": 44,
       "API/harness/tokens.py": 77
     },
-    "api_total_loc": 818,
+    "api_total_loc": 885,
     "sdk_replaces_by_module": {
-      "loop.py": 3,
+      "loop.py": 4,
       "tools.py": 19,
       "history.py": 2,
       "memory.py": 1,
@@ -212,12 +212,12 @@
       "caching.py": 1,
       "tokens.py": 2
     },
-    "sdk_replaces_total_lines": 30,
+    "sdk_replaces_total_lines": 31,
     "sdk_all_files_loc": {
-      "SDK/main.py": 87,
+      "SDK/main.py": 155,
       "SDK/agent.py": 116,
       "SDK/tools.py": 94
     },
-    "sdk_total_loc": 297
+    "sdk_total_loc": 365
   }
 }

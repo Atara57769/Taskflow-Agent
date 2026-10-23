@@ -1,4 +1,4 @@
-"""CLI entrypoint for running the Claude Agent SDK scenario benchmark."""
+"""CLI entrypoint for running the Claude Agent SDK scenario or interactive chat."""
 
 from __future__ import annotations
 
@@ -6,6 +6,7 @@ import argparse
 import json
 import os
 import sys
+import time
 from pathlib import Path
 from typing import Any
 
@@ -25,10 +26,11 @@ def run_scenario(
     data_dir: Path = DEFAULT_DATA_DIR,
     client_factory: Any | None = None,
 ) -> dict[str, Any]:
-    """Execute the multi-session scenario on the Claude Agent SDK from a clean state."""
+    """Execute the multi-session scenario on the Claude Agent SDK from a clean state (wiping memories)."""
     # Ensure ANTHROPIC_API_KEY is unset so SDK uses personal Claude Code login
     os.environ.pop("ANTHROPIC_API_KEY", None)
 
+    # Wipes all memories, tasks, and history files clean before running the scenario
     reset_state(data_dir)
     scenario = json.loads(scenario_path.read_text(encoding="utf-8"))
     model = scenario.get("model", DEFAULT_MODEL)
@@ -81,8 +83,79 @@ def run_scenario(
     return report
 
 
+def run_interactive(
+    session_id: str | None = None,
+    reset_on_start: bool = False,
+    data_dir: Path = DEFAULT_DATA_DIR,
+) -> None:
+    """Run an interactive chat loop with SDK agent, starting a new session each run by default."""
+    os.environ.pop("ANTHROPIC_API_KEY", None)
+    if reset_on_start:
+        reset_state(data_dir)
+        print("[SDK] All memories, tasks, and history have been wiped clean.")
+
+    current_session = session_id or f"session_{int(time.time())}"
+    agent = SDKAgent(session_id=current_session, data_dir=data_dir)
+
+    print(f"=== SmartTasks [SDK] Interactive Mode ===")
+    print(f"Active Session: {current_session}")
+    print("Commands: 'exit'/'quit' to exit, 'new' for new session, 'clear' to wipe memories.\n")
+
+    while True:
+        try:
+            user_input = input("You > ").strip()
+        except (EOFError, KeyboardInterrupt):
+            print("\nExiting interactive chat.")
+            break
+
+        if not user_input:
+            continue
+
+        cmd = user_input.lower()
+        if cmd in {"exit", "quit"}:
+            print("Exiting interactive chat.")
+            break
+
+        if cmd == "new":
+            current_session = f"session_{int(time.time())}"
+            agent = SDKAgent(session_id=current_session, data_dir=data_dir)
+            print(f"\n--- Switched to brand new session: {current_session} ---\n")
+            continue
+
+        if cmd in {"clear", "reset"}:
+            reset_state(data_dir)
+            current_session = f"session_{int(time.time())}"
+            agent = SDKAgent(session_id=current_session, data_dir=data_dir)
+            print(f"\n--- Memories wiped clean. Started new session: {current_session} ---\n")
+            continue
+
+        reply, metrics = agent.run_turn(user_input)  # replaces: loop.py
+        print(f"\nSmartTasks > {reply}")
+        print(
+            f"  [metrics: calls={metrics['model_calls']}, tools={metrics['tools_used']}, "
+            f"cost=${metrics['cost_usd']:.6f}]\n"
+        )
+
+
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Run SmartTasks SDK Agent Scenario")
+    parser = argparse.ArgumentParser(description="Run SmartTasks SDK Agent")
+    parser.add_argument(
+        "-i",
+        "--interactive",
+        action="store_true",
+        help="Run in interactive chat mode (starts a new session each run)",
+    )
+    parser.add_argument(
+        "--reset",
+        action="store_true",
+        help="Wipe all memories and tasks clean before starting",
+    )
+    parser.add_argument(
+        "--session",
+        type=str,
+        default=None,
+        help="Optional session ID for interactive mode (defaults to new session each run)",
+    )
     parser.add_argument(
         "--scenario",
         type=Path,
@@ -96,7 +169,14 @@ def main() -> None:
         help="Path to output JSON report",
     )
     args = parser.parse_args()
-    run_scenario(scenario_path=args.scenario, out_path=args.out)
+
+    if args.interactive:
+        run_interactive(
+            session_id=args.session,
+            reset_on_start=args.reset,
+        )
+    else:
+        run_scenario(scenario_path=args.scenario, out_path=args.out)
 
 
 if __name__ == "__main__":

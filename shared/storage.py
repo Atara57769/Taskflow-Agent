@@ -39,20 +39,20 @@ def get_claude_md_path(data_dir: Path | str | None = None) -> Path:
 def reset_state(data_dir: Path | str | None = None) -> None:
     """Reset all persisted state files so each run begins from a clean state."""
     resolved = resolve_data_dir(data_dir)
-    for file_path in (
-        get_tasks_path(resolved),
-        get_memory_path(resolved),
-        get_history_path(resolved),
-        resolved / "ingredients.json",
-        resolved / "CLAUDE.md",
-    ):
-        if file_path.exists():
-            file_path.unlink()
+    if resolved.exists():
+        for file_path in resolved.iterdir():
+            if file_path.is_file():
+                try:
+                    file_path.unlink()
+                except OSError:
+                    pass
 
-    if resolved == DEFAULT_DATA_DIR:
-        root_claude_md = PROJECT_ROOT / "CLAUDE.md"
-        if root_claude_md.exists():
+    root_claude_md = PROJECT_ROOT / "CLAUDE.md"
+    if root_claude_md.exists():
+        try:
             root_claude_md.unlink()
+        except OSError:
+            pass
 
 
 def load_tasks(data_dir: Path | str | None = None) -> dict[str, dict[str, str]]:

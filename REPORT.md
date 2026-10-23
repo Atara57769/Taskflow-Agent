@@ -57,7 +57,7 @@ Non-empty, non-comment lines of code measured automatically by `shared/evaluator
 
 | Harness Responsibility | API File (`API/harness/`) | API LOC | SDK Replacement Mechanism | SDK `# replaces:` Lines |
 | :--- | :--- | ---: | :--- | ---: |
-| **Agent Loop** | `API/harness/loop.py` | 116 | `client.query()` + `client.receive_response()` | 3 |
+| **Agent Loop** | `API/harness/loop.py` | 116 | `client.query()` + `client.receive_response()` | 4 |
 | **Tools & Dispatch** | `API/harness/tools.py` | 147 | `@tool`, `create_sdk_mcp_server`, `allowed_tools`, `strict_mcp_config=True` | 19 |
 | **Conversation History** | `API/harness/history.py` | 65 | `resume=session_id` | 2 |
 | **Persistent Memory** | `API/harness/memory.py` | 102 | `CLAUDE.md` with `setting_sources=["project"]` | 1 |
@@ -65,11 +65,11 @@ Non-empty, non-comment lines of code measured automatically by `shared/evaluator
 | **Context Compaction** | `API/harness/compaction.py` | 78 | Automatic SDK context window management | 1 |
 | **Prompt Caching** | `API/harness/caching.py` | 44 | Automatic SDK ephemeral cache breakpoints | 1 |
 | **Token & Cost Tracking** | `API/harness/tokens.py` | 77 | `ResultMessage.usage` & `ResultMessage.total_cost_usd` | 2 |
-| **Harness Subtotal** | **8 Files in `API/harness/`** | **677** | **Declarative SDK Configuration** | **30** |
-| **Entrypoint & Agent Glue** | `API/main.py` (85) + `API/agent.py` (56) | 141 | `SDK/main.py` (87) + `SDK/agent.py` (116) + `SDK/tools.py` (94)* | 297 |
-| **Total Package LOC** | **All files in `API/`** | **818** | **All files in `SDK/`** | **297** |
+| **Harness Subtotal** | **8 Files in `API/harness/`** | **677** | **Declarative SDK Configuration** | **31** |
+| **Entrypoint & Agent Glue** | `API/main.py` (152) + `API/agent.py` (56) | 208 | `SDK/main.py` (155) + `SDK/agent.py` (116) + `SDK/tools.py` (94)* | 365 |
+| **Total Package LOC** | **All files in `API/`** | **885** | **All files in `SDK/`** | **365** |
 
-*\*Note: `SDK/tools.py` (94 LOC) includes the 19 `# replaces: tools.py` declarations plus the thin `@tool` wrappers around `shared/tools_impl.py`. Overall, the SDK reduced harness-specific code from 677 LOC to 30 declarative configuration lines (a **95.6% reduction** in harness orchestration code).*
+*\*Note: `SDK/tools.py` (94 LOC) includes the 19 `# replaces: tools.py` declarations plus the thin `@tool` wrappers around `shared/tools_impl.py`. Overall, the SDK reduced harness-specific code from 677 LOC to 31 declarative configuration lines (a **95.4% reduction** in harness orchestration code).*
 
 ---
 
